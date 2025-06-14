@@ -24,6 +24,7 @@ pipeline {
                       cd 40-eks
                       terraform init -reconfigure 
                       terraform plan
+                      
                     """
                     } 
                 }
