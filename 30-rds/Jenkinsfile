@@ -21,7 +21,7 @@ pipeline {
                     withAWS(region: 'us-east-1', credentials: 'aws-creds') {
 
                     sh """
-                      cd 10-sg
+                      cd 30-rds
                       terraform init -reconfigure 
                       terraform plan
                     """
@@ -30,53 +30,19 @@ pipeline {
             }
         }
         stage('Apply') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-            }
             steps {
                 script {
                     withAWS(region: 'us-east-1', credentials: 'aws-creds') {
 
                     sh """
-                      cd 10-sg
+                      cd 30-rds
                       terraform apply -auto-approve
                     """
                     } 
                 }
             }
-        }
-        stage('Parallel Stages') {
-            when { 
-                expression { params.ACTION == 'apply'}
-            }
-            parallel {
-                stage('20-bastion') {    
-                    steps {
-                        build job: '20-bastion', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
-                    }
-                }
-                stage('30-rds') {
-                    steps {
-                        build job: '30-rds', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
-                    }
-                }
-                stage('40-eks') {
-                    steps {
-                        build job: '40-eks', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
-                    }
-                }
-                stage('50-ecr') {
-                    steps {
-                        build job: '50-ecr', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
-                    }
-                }
-            }
-        }
-        
-        }
-    } 
-       
+        }  
+    }  
     post {
         always {
             echo "I will always say Hello again!"
