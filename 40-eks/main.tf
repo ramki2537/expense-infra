@@ -1,6 +1,6 @@
 resource "aws_key_pair" "eks" {
-  key_name   = "expense-eks"
-  public_key = file("~/.ssh/id_rsa.pub")
+  key_name   = "eks-key"
+  public_key = file("${path.module}/../ssh/id_rsa.pub")
 }
 
 module "eks" {
