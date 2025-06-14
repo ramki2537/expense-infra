@@ -25,7 +25,7 @@ pipeline {
 
                     }
                     sh """
-                      cd 00-vpc
+                      cd 00-VPC
                       terraform init -reconfigure 
 
                     """
