@@ -27,12 +27,30 @@ pipeline {
                     sh """
                       cd 00-VPC
                       terraform init -reconfigure 
-
+                      terraform plan
                     """
                     } 
                 }
             }
         }
+        stage('Apply') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+            }
+            steps {
+                script {
+                    withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+
+                    sh """
+                      cd 00-VPC
+                      terraform apply -auto-approve
+                    """
+                    } 
+                }
+            }
+        }
+
     } 
        
     post {
