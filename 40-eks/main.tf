@@ -1,8 +1,7 @@
 resource "aws_key_pair" "eks" {
   key_name   = "expense-eks"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMTa3U8bz+IL4JAGlkeQPf62r2T5ViKpCo+GvOZ8u6KITrHT/nnpd0sbGi0pMTK71vpOk4g0PTxxuqXkXxbEbaL9mjvg14seZVhGWuNGq4sOrYd6dtFeUGIJ7ETgzIXx2ySkVwIQ4mLbqQfiLBg/wxtssJLLNfAcQj1If+wmznyMK28+KTb7ikHq13XRJuTWjgK64GcG2+LcSaGV3acdUQEI+8BMF/qgqrAMjY0WqoTWQrj2AUqwH5uAK9ndl2ltgCh9ajTrpaK31RRjMPJYjAy0eBANrmSmbU7hAf8GR6qdEaFM879VPr0OnfFfz88XrzZzZ48zqFltmCRfTDj7BN7elhuWPFVDsooUUnWB8HJAWuJCUDW62CsvR0RarWfgMww2YoY1po+YhDOZPrRMiupM3I2r3A4lo1u8OT/k3LqdogNZ8t3mEZi8QuURAVYe8Fc1PSLqfHW55R7rwYgbiig7o2SxuLga50lJM0gC1hPDi5QW2p0NcuQQ1OknafjPc= azure@DESKTOP-OILEMS6"
 }
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
