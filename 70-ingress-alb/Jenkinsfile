@@ -29,18 +29,41 @@ pipeline {
                 }
             }
         }
-        stage('Apply') {
+        stage('Apply or Destroy') {
             steps {
                 script {
                     withAWS(region: 'us-east-1', credentials: 'aws-creds') {
 
                     sh """
                       cd 70-ingress-alb
-                      terraform apply -auto-approve
+                      if [ ${params.ACTION} == 'apply']
+                      then
+                         terraform apply -auto-approve
+                      else
+                         terraform destroy -auto-approve
+                      fi
+
                     """
                     } 
                 }
             }
+
+            stage('Apply or Destroy') {
+            steps {
+                script {
+                    withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                       def list = ["60-acm", "50-ecr", "40-eks", "30-rds", "20-bastion", "10-sg", "00-VPC"]
+                       for(item in list){
+                        sh """
+                            cd $dir
+                            terraform init-reconfigure
+                            terraform destroy -auto-approve
+                        """
+                       }
+                    } 
+                }
+            }
+        
         }  
     }  
     post {
