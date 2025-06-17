@@ -71,6 +71,14 @@ pipeline {
                         build job: '50-ecr', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
                     }
                 }
+                
+                
+            }
+        }
+        
+        }
+        stage('Sequential') {
+            stages {
                 stage('60-acm') {
                     steps {
                         build job: '60-acm', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
@@ -82,8 +90,6 @@ pipeline {
                     }
                 }
             }
-        }
-        
         }
     } 
        
