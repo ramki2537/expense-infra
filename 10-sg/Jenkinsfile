@@ -71,6 +71,16 @@ pipeline {
                         build job: '50-ecr', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
                     }
                 }
+                stage('60-acm') {
+                    steps {
+                        build job: '60-acm', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
+                    }
+                }
+                stage('70-ingress-alb') {
+                    steps {
+                        build job: '70-ingress-alb', parameters: [string(name: 'ACTION', value: 'apply')], wait: false
+                    }
+                }
             }
         }
         
