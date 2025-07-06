@@ -28,9 +28,14 @@ pipeline {
                    terraform plan
                  """
                 }
-            }
+              }
+           }
         }
         stage('apply') {
+            input {
+                message "Should we continue?"
+                ok "Yes. please proceed"
+            }
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                   sh """
