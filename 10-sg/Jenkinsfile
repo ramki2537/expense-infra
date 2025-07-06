@@ -13,7 +13,7 @@ pipeline {
 
      parameters {
         choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Pick something')
-        
+        }
     stages {
         stage('Init') {
             steps {
@@ -25,9 +25,9 @@ pipeline {
                    terraform plan
                  """
                 }
-              }
-           }
-        }   
+            }
+        }
+    }   
     stage('apply') {
             input {
                 message "Should we continue?"
