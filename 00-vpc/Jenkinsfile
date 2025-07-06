@@ -31,9 +31,23 @@ pipeline {
                 }
               }
            }
-        }
-        
+        }   
     }
+    stage('apply') {
+            input {
+                message "Should we continue?"
+                ok "Yes. please proceed"
+            }
+            steps {
+                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                  sh """
+                   cd 00-vpc
+                   terraform apply -auto-approve
+                 """
+                }
+            }
+          }
+        }
     post {
         always {
             echo "I will always say Hello again!"
@@ -46,5 +60,3 @@ pipeline {
             echo "I will run when pipeline is success"
         }
     }
-
-}
