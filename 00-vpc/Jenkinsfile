@@ -1,8 +1,8 @@
 pipeline {
     agent { label 'AGENT-1' }
-    environment {
+    environment { 
         PROJECT = 'EXPENSE'
-        COMPONENT = 'BACKEND'
+        COMPONENT = 'BACKEND' 
         DEPLOY_TO = "production"
     }
     options {
@@ -10,40 +10,42 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES')
         ansiColor('xterm')
     }
-
-    parameters {
+    parameters{
         choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Pick something')
     }
     stages {
         stage('Init') {
             steps {
-                script {
+               script{
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
-                  sh """
-                     cd 00-vpc
-                     terraform init -reconfigure
-                     terraform plan
-                 """
+                    sh """
+                        cd 00-vpc
+                        terraform init -reconfigure
+                        terraform plan
+                    """
                 }
-              }
-           }
-        }   
-    stage('apply') {
-            input {
-                message "Should we continue?"
-                ok "Yes. please proceed"
-            }
-            steps {
-                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
-                  sh """
-                     cd 00-vpc
-                     terraform apply -auto-approve
-                 """
-                }
+                 
+               }
             }
         }
-    }
-    stage('Trigger SG'){
+        stage('Apply') {
+            input {
+                message "Should we continue?"
+                ok "Yes, please proceed."
+            }
+            steps {
+               script{
+                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                    sh """
+                        cd 00-vpc
+                        terraform apply -auto-approve
+                    """
+                }
+                 
+               }
+            }
+        }
+        stage('Trigger SG'){
             when { 
                 expression { params.ACTION == 'apply'}
             }
@@ -52,18 +54,18 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            echo "I will always say Hello again!"
+    post { 
+        always { 
+            echo 'I will always say Hello again!'
             deleteDir()
         }
-        failure {
-            echo "I will run when pipeline is failed"
+        failure { 
+            echo 'I will run when pipeline is failed'
         }
-        success {
-            echo "I will run when pipeline is success"
+        success { 
+            echo 'I will run when pipeline is success'
         }
     }
+}
 
 
