@@ -18,7 +18,7 @@ pipeline {
         password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     } */
     stages {
-        stage('init') {
+        stage('Init') {
             steps {
                 script {
                     withAWS(region: 'us-east-1', credentials: 'aws-creds') {
@@ -31,21 +31,7 @@ pipeline {
               }
            }
         }
-        stage('apply') {
-            input {
-                message "Should we continue?"
-                ok "Yes. please proceed"
-            }
-            steps {
-                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
-                  sh """
-                   cd 00-vpc
-                   terraform apply -auto-approve
-                 """
-                }
-            }
-          }
-        }
+        
     }
     post {
         always {
