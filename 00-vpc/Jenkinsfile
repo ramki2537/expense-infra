@@ -18,11 +18,11 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                   sh """
-                   cd 00-vpc
-                   terraform init -reconfigure
-                   terraform plan
+                     cd 00-vpc
+                     terraform init -reconfigure
+                     terraform plan
                  """
                 }
               }
@@ -36,8 +36,8 @@ pipeline {
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                   sh """
-                   cd 00-vpc
-                   terraform apply -auto-approve
+                     cd 00-vpc
+                     terraform apply -auto-approve
                  """
                 }
             }
@@ -47,11 +47,12 @@ pipeline {
         when {
             expression { params.ACTION == 'apply' }
         }
-    steps {
+        steps {
            build job: '10-sg', parameters: [string(name: 'ACTION', value: 'apply')], propagate: false
         }
     }
 }
+
     post {
         always {
             echo "I will always say Hello again!"
@@ -64,4 +65,5 @@ pipeline {
             echo "I will run when pipeline is success"
         }
     }
+}
 
