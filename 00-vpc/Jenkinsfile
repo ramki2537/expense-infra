@@ -32,7 +32,6 @@ pipeline {
               }
            }
         }   
-    }
     stage('apply') {
             input {
                 message "Should we continue?"
@@ -48,6 +47,7 @@ pipeline {
             }
           }
         }
+    }
     post {
         always {
             echo "I will always say Hello again!"
